@@ -1,0 +1,30 @@
+<%- include("header"); %>
+<div class="container">
+  <% products.forEach(productsRow=>{ %>
+    <div class="row">
+      <% productsRow.forEach(product=>{ %>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="text-center">
+            <img src="<%= product.imgPath %>" class="card-img-top" alt="...">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.productName %></h5>
+            <p class="card-text">Some quick<%= product.information.storageCapacity %><br>
+              example text to build <%= product.information.numberOfSim %><br>
+              on the card title <%= product.information.cameraResolution %><br>
+              and make up the bulk of the card's <%= product.information.displaySize%><br>
+              content.
+            </p>
+            <div class="controll">
+              <div class="price"><%= product.price %> $</div>
+              <a href="#" class="btn btn-success float-right">BUY</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <% }); %>
+</div>
+<%- include("footer"); %>
