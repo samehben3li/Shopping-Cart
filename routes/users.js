@@ -6,7 +6,7 @@ const passport = require("passport")
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
-  var messagesError = req.flash("error")
+  var messagesError = req.flash("signupError")
   res.render("user/signup", { title: "Shopping-cart", messages: messagesError })
 })
 
@@ -21,7 +21,7 @@ router.post("/signup", [
     }
     return true
   })
-], (req, res) => {
+], (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
 
@@ -29,25 +29,17 @@ router.post("/signup", [
     for (let i = 0; i < errors.errors.length; i++) {
       validationMessages.push(errors.errors[i].msg)
     }
-    req.flash("error", validationMessages)
+    req.flash("signupError", validationMessages)
     res.redirect("signup")
+    return
   }
-  const user = new User({
-    email: req.body.email,
-    password: new User().hashPassword(req.body.password)
-  })
-  User.findOne({ email: req.body.email }, (err, result) => {
-    if (result) {
-      req.flash("error", "this email already exist")
-      res.redirect("signup")
-    } else {
-      user.save((erro, usr) => {
-        console.log(erro)
-        res.send(usr)
-      })
-    }
-  })
-})
+  next()
+}, passport.authenticate("local-signup", {
+  session: false,
+  successRedirect: "signin",
+  failureRedirect: "signup",
+  failureMessage: true
+}))
 
 router.get("/signin", (req, res) => {
   var messagesError = req.flash("signinError")

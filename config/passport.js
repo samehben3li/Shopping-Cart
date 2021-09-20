@@ -29,3 +29,28 @@ passport.use("local-signin", new localStrategy({
         return done(null, user)
     })
 }))
+
+passport.use("local-signup", new localStrategy({
+    usernameField: "email",
+    passwordField: "password",
+    passReqToCallback: true
+}, (req, email, password, done) => {
+    User.findOne({email: email},(err,user)=>{
+        if(err){
+            return done(err)
+        }
+        if(user){
+            return done(null,false,req.flash("signupError","this email already exist"))
+        }
+        const newUser = new User({
+            email: email,
+            password: new User().hashPassword(password)
+        })
+        newUser.save((err,usr)=>{
+            if (err){
+                return done(err)
+            }
+            return done(null,usr)
+        })
+    })
+}))
