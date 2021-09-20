@@ -5,7 +5,7 @@ const User = require("../models/User")
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
-  let messagesError = req.flash("error")
+  var messagesError = req.flash("error")
   res.render("user/signup", { title: "Shopping-cart", messages: messagesError })
 })
 
