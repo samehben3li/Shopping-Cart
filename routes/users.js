@@ -5,8 +5,10 @@ const User = require("../models/User")
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
-  res.render("user/signup", { title: "Shopping-cart" })
+  let messagesError = req.flash("error")
+  res.render("user/signup", { title: "Shopping-cart", messages: messagesError })
 })
+
 router.post("/signup", [
   check("email").not().isEmpty().withMessage("plaise enter your email"),
   check("email").isEmail().withMessage("plaise enter valide email"),
@@ -21,8 +23,13 @@ router.post("/signup", [
 ], (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    console.log(errors)
-    return
+
+    var validationMessages = []
+    for (let i = 0; i < errors.errors.length; i++) {
+      validationMessages.push(errors.errors[i].msg)
+    }
+    req.flash("error", validationMessages)
+    res.redirect("signup")
   }
   const user = new User({
     email: req.body.email,
@@ -30,13 +37,14 @@ router.post("/signup", [
   })
   User.findOne({ email: req.body.email }, (err, result) => {
     if (result) {
-      console.log("email already exist")
-      return
+      req.flash("error", "this email already exist")
+      res.redirect("signup")
+    } else {
+      user.save((err, usr) => {
+        console.log(err ? err : usr)
+        res.send(usr)
+      })
     }
-    user.save((err, usr) => {
-      console.log(err ? err : usr)
-      res.send(usr)
-    })
   })
 })
 
