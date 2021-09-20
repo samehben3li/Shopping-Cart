@@ -28,9 +28,15 @@ router.post("/signup", [
     email: req.body.email,
     password: new User().hashPassword(req.body.password)
   })
-  user.save((err, usr) => {
-    console.log(err ? err : usr)
-    res.send("ok")
+  User.findOne({ email: req.body.email }, (err, result) => {
+    if (result) {
+      console.log("email already exist")
+      return
+    }
+    user.save((err, usr) => {
+      console.log(err ? err : usr)
+      res.send(usr)
+    })
   })
 })
 
