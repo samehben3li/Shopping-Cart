@@ -1,5 +1,4 @@
-<%- include("header"); %>
-<div class="container">
+<%- include("partials/header"); %>
   <% products.forEach(productsRow=>{ %>
     <div class="row">
       <% productsRow.forEach(product=>{ %>
@@ -26,5 +25,4 @@
       <% }); %>
     </div>
     <% }); %>
-</div>
-<%- include("footer"); %>
+<%- include("partials/footer"); %>

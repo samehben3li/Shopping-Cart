@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require("mongoose")
-const expressHbs=require("express-handlebars")
 
 const uri = "mongodb+srv://sameh:sam123@cluster0.k9k3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
