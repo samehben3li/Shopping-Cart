@@ -12,6 +12,8 @@ router.get('/', function (req, res, next) {
     for (let i = 0; i < docs.length; i += colGrid) {
       productGrid.push(docs.slice(i, i + colGrid))
     }
+    console.log(req.session)
+    console.log(req.user)
     res.render('index', { title: 'Shopping cart', products: productGrid });
   })
 });

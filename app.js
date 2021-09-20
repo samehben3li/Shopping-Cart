@@ -17,6 +17,7 @@ var app = express();
 mongoose.connect(uri,{useNewUrlParser : true},(err)=>{
   console.log(err ? err : "connecing to DB ...")
 })
+require("./config/passport")
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +30,7 @@ app.use(cookieParser());
 app.use(session({
   secret : "Shopping cart_?@!",
   saveUninitialized : false,
-  resave : false,
+  resave : true,
 }))
 app.use(flash())
 app.use(password.initialize())

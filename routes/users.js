@@ -41,8 +41,8 @@ router.post("/signup", [
       req.flash("error", "this email already exist")
       res.redirect("signup")
     } else {
-      user.save((err, usr) => {
-        console.log(err ? err : usr)
+      user.save((erro, usr) => {
+        console.log(erro)
         res.send(usr)
       })
     }
@@ -53,9 +53,15 @@ router.get("/signin", (req, res) => {
   res.render("user/signin", { title: "Shopping-cart" })
 })
 
+router.get("/profile",(req,res,next)=>{
+  console.log(req.session)
+  console.log(req.user)
+  res.render("user/profile")
+})
+
 router.post("/signin", passport.authenticate("local-signin", {
-  successRedirect: "",
-  failureRedirect: "/signin",
+  successRedirect: "profile",
+  failureRedirect: "signin",
   failureFlash: true
 }))
 
