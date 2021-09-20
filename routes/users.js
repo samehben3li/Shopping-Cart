@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const { check, validationResult } = require("express-validator")
+const User = require("../models/User")
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
@@ -12,18 +13,25 @@ router.post("/signup", [
   check("password").not().isEmpty().withMessage("plaise enter your password"),
   check("password").isLength({ min: 5 }).withMessage("plaise enter password more than 5 char"),
   check("confirm-password").custom((value, { req }) => {
-    if(value!==req.body.password){
+    if (value !== req.body.password) {
       throw new Error("password and confirm-password not matched")
     }
     return true
   })
 ], (req, res) => {
   const errors = validationResult(req)
-  if ( ! errors.isEmpty()){
+  if (!errors.isEmpty()) {
     console.log(errors)
     return
   }
-  res.send("ok")
+  const user = new User({
+    email: req.body.email,
+    password: new User().hashPassword(req.body.password)
+  })
+  user.save((err, usr) => {
+    console.log(err ? err : usr)
+    res.send("ok")
+  })
 })
 
 module.exports = router;
