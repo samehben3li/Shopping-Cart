@@ -50,16 +50,32 @@ router.post("/signup", [
 })
 
 router.get("/signin", (req, res) => {
-  res.render("user/signin", { title: "Shopping-cart" })
+  var messagesError = req.flash("signinError")
+  res.render("user/signin", { title: "Shopping-cart", messages: messagesError })
 })
 
-router.get("/profile",(req,res,next)=>{
-  console.log(req.session)
-  console.log(req.user)
+router.get("/profile", (req, res, next) => {
   res.render("user/profile")
 })
 
-router.post("/signin", passport.authenticate("local-signin", {
+router.post("/signin", [
+  check("email").not().isEmpty().withMessage("plaise enter your email"),
+  check("email").isEmail().withMessage("plaise enter valide email"),
+  check("password").not().isEmpty().withMessage("plaise enter your password"),
+  check("password").isLength({ min: 5 }).withMessage("plaise enter password more than 5 char")
+], (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    var messagesError = []
+    for (let i = 0; i < errors.errors.length; i++) {
+      messagesError.push(errors.errors[i].msg)
+    }
+    req.flash("signinError", messagesError)
+    res.redirect("signin")
+    return
+  }
+  next()
+}, passport.authenticate("local-signin", {
   successRedirect: "profile",
   failureRedirect: "signin",
   failureFlash: true

@@ -1,16 +1,23 @@
 <%- include("../partials/header"); %>
     <div class="col-md-4 offset-md-4" style="padding-top: 80px;">
         <h5 class="text-center">Sign In</h5>
-        <form action="signin" method="post">
-            <div class="form-group">
-                <label for="email">email</label>
-                <input type="email" name="email" class="form-control" placeholder="Enter your email">
+        <% messages.forEach(message=> { %>
+            <div class="alert alert-danger">
+                <span>
+                    <%= message %>
+                </span>
             </div>
-            <div class="form-group">
-                <label for="password">password</label>
-                <input type="password" name="password" class="form-control" placeholder="Enter your password">
-            </div>
-            <button type="submit" class="btn btn-primary">signin</button>
-        </form>
+            <% }) %>
+                <form action="signin" method="post">
+                    <div class="form-group">
+                        <label for="email">email</label>
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">signin</button>
+                </form>
     </div>
-<%- include("../partials/footer"); %>
+    <%- include("../partials/footer"); %>
