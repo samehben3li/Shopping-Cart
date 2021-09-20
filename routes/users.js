@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { check, validationResult } = require("express-validator")
 const User = require("../models/User")
+const passport = require("passport")
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
@@ -47,5 +48,15 @@ router.post("/signup", [
     }
   })
 })
+
+router.get("/signin", (req, res) => {
+  res.render("user/signin", { title: "Shopping-cart" })
+})
+
+router.post("/signin", passport.authenticate("local-signin", {
+  successRedirect: "",
+  failureRedirect: "/signin",
+  failureFlash: true
+}))
 
 module.exports = router;

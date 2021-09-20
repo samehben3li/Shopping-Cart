@@ -6,6 +6,7 @@ var logger = require('morgan');
 const mongoose = require("mongoose")
 const session = require("express-session")
 const flash = require("connect-flash")
+const password = require("passport")
 
 const uri = "mongodb+srv://sameh:sam123@cluster0.k9k3q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
@@ -31,6 +32,8 @@ app.use(session({
   resave : false,
 }))
 app.use(flash())
+app.use(password.initialize())
+app.use(password.session())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
